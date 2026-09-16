@@ -1,7 +1,6 @@
 # E-Commerce Profitability & Risk Analysis
 
-**Live Dashboard:** [ecommerce-profitability-analysis.streamlit.app](https://YOUR-APP-URL-HERE) ← *update after deployment*
-
+**Live Dashboard:** [ecommerce-profitability-analysis.streamlit.app](https://YOUR-APP-URL-HERE) 
 ---
 
 ## Business Problem
@@ -47,7 +46,7 @@ analysis.sql (RFM + Cohort + Profitability)
 | `app.py` | Streamlit dashboard application |
 | `analysis.sql` | SQL queries: RFM segmentation, state profitability, payment risk, category concentration |
 | `requirements.txt` | Python dependencies |
-| `dashboard1.png` | Dashboard screenshot |
+| `dashboard.png` | Dashboard screenshot |
 
 ## How to Run Locally
 
