@@ -8,6 +8,14 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+import os
+import subprocess
+
+# Safety net: regenerate data if CSV is missing
+if not os.path.exists("ecommerce_data.csv"):
+    print("Dataset not found. Generating...")
+    subprocess.run(["python", "generate_data.py"], check=True)
+
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="E-Commerce Profitability & Risk Analysis",
