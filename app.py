@@ -9,12 +9,25 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 import os
-import subprocess
 
-# Safety net: regenerate data if CSV is missing
-if not os.path.exists("ecommerce_data.csv"):
-    print("Dataset not found. Generating...")
-    subprocess.run(["python", "generate_data.py"], check=True)
+from generate_data import CSV_PATH, generate_dataset
+
+
+def csv_is_stale(path: str) -> bool:
+    if not os.path.exists(path):
+        return True
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("OrderID,"):
+                continue
+            parts = line.strip().split(",")
+            if len(parts) >= 10 and float(parts[9]) <= 0:
+                return True
+    return False
+
+
+if csv_is_stale(CSV_PATH):
+    generate_dataset(CSV_PATH)
 
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -26,7 +39,7 @@ st.set_page_config(
 # ---------------- DATA ----------------
 @st.cache_data
 def load_data():
-    return pd.read_csv("ecommerce_data.csv")
+    return pd.read_csv(CSV_PATH)
 
 df = load_data()
 
