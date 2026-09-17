@@ -170,14 +170,28 @@ with r3b:
 st.markdown("---")
 st.subheader("🔍 Auto-Generated Insights")
 
-worst_month = month_data.loc[month_data['Profit'].idxmin(), 'Month']
-lowest_state = state_data.iloc[0]['State']
-top_pay = pay_data.sort_values('Quantity', ascending=False).iloc[0]
-top_pay_pct = top_pay['Quantity'] / pay_data['Quantity'].sum() * 100
+if filtered.empty:
+    st.info("No rows match the current filters.")
+else:
+    profit_by_state = (
+        filtered.groupby("State", as_index=False)["Profit"].sum()
+        .sort_values("Profit")
+    )
+    worst_month = month_data.loc[month_data["Profit"].idxmin(), "Month"]
+    worst_state = profit_by_state.iloc[0]["State"]
+    worst_state_profit = profit_by_state.iloc[0]["Profit"]
+    top_pay = pay_data.sort_values("Quantity", ascending=False).iloc[0]
+    top_pay_pct = top_pay["Quantity"] / pay_data["Quantity"].sum() * 100
 
-i1, i2, i3 = st.columns(3)
-i1.info(f"**Worst Month:** {worst_month}\n\nHighest loss driver in Q3.")
-i2.warning(f"**Lowest Revenue State:** {lowest_state}\n\nRequires regional strategy review.")
-i3.success(f"**Dominant Payment:** {top_pay['PaymentMode']} ({top_pay_pct:.1f}%)\n\nReturn risk exposure to monitor.")
+    i1, i2, i3 = st.columns(3)
+    i1.info(f"**Worst Month:** {worst_month}\n\nLowest profit month in the filtered Q3 data.")
+    i2.warning(
+        f"**Highest Loss State:** {worst_state} (₹{worst_state_profit:,.0f})\n\n"
+        "Primary regional profit drag."
+    )
+    i3.success(
+        f"**Dominant Payment (units):** {top_pay['PaymentMode']} ({top_pay_pct:.1f}%)\n\n"
+        "Largest share of units sold."
+    )
 
 st.caption("Built with Python · Pandas · Plotly · Streamlit")
